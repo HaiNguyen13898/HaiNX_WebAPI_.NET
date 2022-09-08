@@ -8,5 +8,6 @@ namespace WebAPI2.Services
         Task<List<Student>> GetStudentList();
         Task<Student> UpdateStudent(Student student);
         Task<bool> DeleteStudent(int key);
+        Task<Student> GetStudentById(int id);
     }
 }

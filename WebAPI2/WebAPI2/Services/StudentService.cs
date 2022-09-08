@@ -40,10 +40,10 @@ namespace WebAPI2.Services
             return student;
         }
 
-        public async Task<Student> GetStudent(int id)
+        public async Task<Student> GetStudentById(int id)
         {
-            var studentList = await _dbService.GetAsync<Student>("SELECT * FROM student where id=@id", new { id });
-            return studentList;
+            var student = await _dbService.GetAsync<Student>("select * from student where id=@Id",new{id});
+            return student;
         }
     }
 }

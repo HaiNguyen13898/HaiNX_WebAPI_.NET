@@ -22,6 +22,13 @@ namespace WebAPI2.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetStudentById(int id)
+        {
+            var result = await _studentService.GetStudentById(id);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddEmployee([FromBody] Student student)
         {
