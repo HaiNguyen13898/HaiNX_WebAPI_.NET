@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebAPI4.Models
 {
@@ -12,8 +13,14 @@ namespace WebAPI4.Models
 
         [StringLength(100)]
         public string Name { get; set; }
-        public DateTime DateBirth { get; set; }
+
+        [DataType(DataType.Date)]
+        public String DateBirth { get; set; }
         public string Address { get; set; }
+        public int DepartmentId { get; set; }
+        [JsonIgnore]
+        public Department Department { get; set; }
+
 
 
     }

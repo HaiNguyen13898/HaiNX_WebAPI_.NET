@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI4.Data;
+using WebAPI4.Dto;
 using WebAPI4.Models;
+
 
 namespace WebAPI4.Controllers
 {
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase
@@ -18,27 +22,39 @@ namespace WebAPI4.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployee()
+        public async Task<ActionResult<List<Employee>>> GetEmployee()
         {
-            return Ok( await _dataContext.Employees.ToListAsync());
-        }
+            var employee = await _dataContext.Employees.ToListAsync();
+
+            return employee;
+    }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee(Employee employee)
+        public async Task<ActionResult<List<Employee>>> CreateEmployee(EmployeeDto employeeDto)
         {
+            var department = await _dataContext.Depart.FindAsync(employeeDto.DepartmentId);
+            if(department == null)
+            {
+                return NotFound();
+            }
+
             var employees = new Employee()
             {
-                Name = employee.Name,
-                DateBirth = employee.DateBirth,
-                Address = employee.Address,
+                Name = employeeDto.Name,
+                DateBirth = employeeDto.DateBirth,
+                Address = employeeDto.Address,
+                Department = department
+            
             };
             await _dataContext.AddAsync(employees);
             await _dataContext.SaveChangesAsync();
             return Ok( employees);
         }
+
+
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> UpdateEmployee([FromRoute] int id, Employee employee)
+        public async Task<IActionResult> UpdateEmployee([FromRoute] int id, EmployeeDto employeeDto)
         {
             var UpdateEmployee = _dataContext.Employees.Find(id);
             if(UpdateEmployee == null)
@@ -46,9 +62,10 @@ namespace WebAPI4.Controllers
                 return NotFound();
             }
 
-            UpdateEmployee.Name = employee.Name;
-            UpdateEmployee.Address = employee.Address;
-            UpdateEmployee.DateBirth = employee.DateBirth;
+            UpdateEmployee.Name = employeeDto.Name;
+            UpdateEmployee.Address = employeeDto.Address;
+            UpdateEmployee.DateBirth = employeeDto.DateBirth;
+            UpdateEmployee.DepartmentId = employeeDto.DepartmentId;
             await _dataContext.SaveChangesAsync();
             return Ok(UpdateEmployee);
 
@@ -58,8 +75,8 @@ namespace WebAPI4.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetEmployee([FromRoute] int id)
         {
-            var employee = await _dataContext.Employees.FindAsync(id);   
-            if(employee == null)
+            var employee = await _dataContext.Employees.Where(e => e.Id == id).ToListAsync();
+            if (employee == null)
             {
                 return NotFound();
             }
