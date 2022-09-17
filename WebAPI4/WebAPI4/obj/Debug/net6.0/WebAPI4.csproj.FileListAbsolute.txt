@@ -33,3 +33,6 @@ D:\findx\CS_Day_3\WebAPI4\WebAPI4\bin\Debug\net6.0\Microsoft.EntityFrameworkCore
 D:\findx\CS_Day_3\WebAPI4\WebAPI4\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
 D:\findx\CS_Day_3\WebAPI4\WebAPI4\bin\Debug\net6.0\Npgsql.dll
 D:\findx\CS_Day_3\WebAPI4\WebAPI4\bin\Debug\net6.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+D:\findx\CS_Day_3\WebAPI4\WebAPI4\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+D:\findx\CS_Day_3\WebAPI4\WebAPI4\bin\Debug\net6.0\System.IO.Packaging.dll
+D:\findx\CS_Day_3\WebAPI4\WebAPI4\bin\Debug\net6.0\Dapper.dll

@@ -1,6 +1,9 @@
 global using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WebAPI4.Data;
+using WebAPI4.Service;
+using WebAPI4.Service.Impl;
+
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 services.AddEndpointsApiExplorer();
@@ -14,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(
     o => o.UseNpgsql(builder.Configuration.GetConnectionString("EmployeeDB")));
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 builder.Services.AddCors(options =>
 {

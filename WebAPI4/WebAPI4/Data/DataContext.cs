@@ -15,8 +15,10 @@ namespace WebAPI4.Data
             modelBuilder.Entity<Employee>()
                .HasOne(e => e.Department)
                .WithMany(d => d.Employees)
-               .HasForeignKey(d => d.DepartmentId)
+               .HasForeignKey(e => e.DepartmentId)
                .OnDelete(DeleteBehavior.NoAction);
+
+
         }
 
 
