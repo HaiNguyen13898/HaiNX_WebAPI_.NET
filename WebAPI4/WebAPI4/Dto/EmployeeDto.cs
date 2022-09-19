@@ -10,6 +10,7 @@ namespace WebAPI4.Dto
         public string Name { get; set; }
         public string DateBirth { get; set; }
         public string Address { get; set; }
-        public  int DepartmentId { get; set; }        
+        public int DepartmentId { get; set; }
+        public string NameDepart { get; set; }
     }
 }

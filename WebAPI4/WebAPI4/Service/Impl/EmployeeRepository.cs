@@ -39,7 +39,7 @@ namespace WebAPI4.Service.Impl
 
         public ActionResult<IEnumerable<Employee>> getListEmployee()
         {
-            return dataContext.Employees.Include(e=> e.Department).ToList();
+            return dataContext.Employees.Include(e => e.Department).ToList();
         }
 
         public Employee getEmployeeById(int id)
@@ -63,6 +63,28 @@ namespace WebAPI4.Service.Impl
                 employeeUpdate.DepartmentId = employeeDto.DepartmentId;
                 dataContext.SaveChanges();
             }
+        }
+
+        public List<EmployeeDto> getAllSearchPaging(string name, string dateBirth)
+        {
+            var list = dataContext.Employees.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(name) || !string.IsNullOrEmpty(dateBirth))
+            {
+                list = list.Where(e => 
+                e.Name.ToLower().Contains(name) || e.DateBirth.Equals(dateBirth));
+            }
+            
+            var result = list.Select(e => new EmployeeDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Address = e.Address,
+                DateBirth = e.DateBirth,
+                NameDepart = e.Department.Name,
+                DepartmentId = e.Department.Id,
+            });
+            return result.ToList();
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebAPI4.Data;
@@ -11,9 +12,10 @@ using WebAPI4.Data;
 namespace WebAPI4.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class EmployeeDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220918124913_updateDatabase2")]
+    partial class updateDatabase2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +81,8 @@ namespace WebAPI4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("DateBirth")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateOnly>("DateBirth")
+                        .HasColumnType("date");
 
                     b.Property<int?>("DepartmentId")
                         .IsRequired()

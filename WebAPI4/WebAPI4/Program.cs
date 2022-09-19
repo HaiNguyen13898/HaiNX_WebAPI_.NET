@@ -1,4 +1,5 @@
 global using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using WebAPI4.Data;
 using WebAPI4.Service;
@@ -10,14 +11,16 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 // Add services to the container.
-
-builder.Services.AddControllers();
+// Fix ALL NOT REQUIRED properties.
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(
     o => o.UseNpgsql(builder.Configuration.GetConnectionString("EmployeeDB")));
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+
 
 builder.Services.AddCors(options =>
 {

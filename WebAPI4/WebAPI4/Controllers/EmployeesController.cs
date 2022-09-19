@@ -19,11 +19,12 @@ namespace WebAPI4.Controllers
         }
         // GET: List
         [HttpGet]
-        public IActionResult getListEmployee()
+        public IActionResult getListEmployee(string name, string dateBirth)
         {
             try
             {
-                return Ok(employeeRepository.getListEmployee());
+                var list = employeeRepository.getAllSearchPaging(name, dateBirth);
+                return Ok(list);
             }
             catch
             {
@@ -38,7 +39,7 @@ namespace WebAPI4.Controllers
             try
             {
                 var employee = employeeRepository.getEmployeeById(id);
-                if(employee == null)
+                if (employee == null)
                 {
                     return NotFound();
                 }
@@ -53,12 +54,12 @@ namespace WebAPI4.Controllers
 
         // POST: Add new employee
         [HttpPost]
-        public IActionResult createEmployee([FromBody]EmployeeDto employeeDto)
+        public IActionResult createEmployee([FromBody] EmployeeDto employeeDto)
         {
             try
             {
                 return Ok(employeeRepository.addEmployee(employeeDto));
-                
+
             }
             catch
             {
