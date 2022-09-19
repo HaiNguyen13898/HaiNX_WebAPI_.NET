@@ -13,6 +13,9 @@ namespace WebAPI4.Service.Impl
             this.dataContext = dataContext;
         }
 
+        // record in page
+        public static int PAGE_SIZE { get; set; } = 2;
+
         public Employee addEmployee(EmployeeDto employeeDto)
         {
             var _employee = new Employee
@@ -44,7 +47,7 @@ namespace WebAPI4.Service.Impl
 
         public Employee getEmployeeById(int id)
         {
-            var employee = dataContext.Employees.Find(id);
+            var employee = dataContext.Employees.Where(e => e.Id == id).FirstOrDefault();
             if (employee != null)
             {
                 return employee;
@@ -65,19 +68,30 @@ namespace WebAPI4.Service.Impl
             }
         }
 
-        public List<Employee> getAllSearchPaging(string name, string dateBirth, int? idDepart)
+        public List<Employee> getAllSearchPaging(string name, string dateBirth, string? nameDepart, int page = 1)
         {
-            var list = dataContext.Employees.AsQueryable();
+            #region List-Search
+            var list = dataContext.Employees.Include(e => e.Department).AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(name) || !string.IsNullOrEmpty(dateBirth))
+            if (!string.IsNullOrWhiteSpace(name))
             {
                 list = list.Where(e =>
-                e.Name.ToLower().Contains(name) || e.DateBirth.Equals(dateBirth));
+                e.Name.ToLower().Contains(name) || e.Name.Contains(name));
             }
-            if(idDepart.HasValue)
+            if (!string.IsNullOrEmpty(dateBirth))
             {
-                list = list.Where(e => e.Department.Id == idDepart);
-            }    
+                list = list.Where(e => e.DateBirth.Contains(dateBirth));
+            }
+            if (!string.IsNullOrWhiteSpace(nameDepart))
+            {
+                list = list.Where(e => e.Department.Name.ToLower().Contains(nameDepart)
+                || e.Department.Name.Contains(nameDepart));
+            }
+            #endregion
+
+            #region Paging
+            //list = list.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            #endregion
 
             //var result = list.Select(e => new Employee
             //{
@@ -87,8 +101,9 @@ namespace WebAPI4.Service.Impl
             //    DateBirth = e.DateBirth,
             //    DepartmentId = e.Department.Id,
             //    Department = e.Department,          
-            //});
-            return list.Include(e => e.Department).ToList();
+            //}); 
+            var result = PageList<Employee>.Create(list, page, PAGE_SIZE);
+            return result.ToList();
         }
     }
 }
