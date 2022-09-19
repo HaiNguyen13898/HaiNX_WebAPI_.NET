@@ -19,11 +19,11 @@ namespace WebAPI4.Controllers
         }
         // GET: List
         [HttpGet]
-        public IActionResult getListEmployee(string name, string dateBirth)
+        public IActionResult getListEmployee(string name, string dateBirth, int? idDepart)
         {
             try
             {
-                var list = employeeRepository.getAllSearchPaging(name, dateBirth);
+                var list = employeeRepository.getAllSearchPaging(name, dateBirth, idDepart);
                 return Ok(list);
             }
             catch

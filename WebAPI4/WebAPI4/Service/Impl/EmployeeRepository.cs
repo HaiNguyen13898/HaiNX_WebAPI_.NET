@@ -65,26 +65,30 @@ namespace WebAPI4.Service.Impl
             }
         }
 
-        public List<EmployeeDto> getAllSearchPaging(string name, string dateBirth)
+        public List<Employee> getAllSearchPaging(string name, string dateBirth, int? idDepart)
         {
             var list = dataContext.Employees.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(name) || !string.IsNullOrEmpty(dateBirth))
             {
-                list = list.Where(e => 
+                list = list.Where(e =>
                 e.Name.ToLower().Contains(name) || e.DateBirth.Equals(dateBirth));
             }
-            
-            var result = list.Select(e => new EmployeeDto
+            if(idDepart.HasValue)
             {
-                Id = e.Id,
-                Name = e.Name,
-                Address = e.Address,
-                DateBirth = e.DateBirth,
-                NameDepart = e.Department.Name,
-                DepartmentId = e.Department.Id,
-            });
-            return result.ToList();
+                list = list.Where(e => e.Department.Id == idDepart);
+            }    
+
+            //var result = list.Select(e => new Employee
+            //{
+            //    Id = e.Id,
+            //    Name = e.Name,
+            //    Address = e.Address,
+            //    DateBirth = e.DateBirth,
+            //    DepartmentId = e.Department.Id,
+            //    Department = e.Department,          
+            //});
+            return list.Include(e => e.Department).ToList();
         }
     }
 }

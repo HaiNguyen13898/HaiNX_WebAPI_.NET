@@ -7,7 +7,7 @@ namespace WebAPI4.Service
     public interface IEmployeeRepository
     {
         ActionResult<IEnumerable<Employee>> getListEmployee();
-        List<EmployeeDto> getAllSearchPaging(string name, string dateBirth);
+        List<Employee> getAllSearchPaging(string name, string dateBirth, int? idDepart);
         Employee getEmployeeById(int id);
         Employee addEmployee(EmployeeDto employeeDto);
         void update(EmployeeDto employeeDto);
